@@ -51,7 +51,7 @@ fun AboutScreen(navController: NavHostController) {
                     Text(text = stringResource(id = R.string.tentang_aplikasi))
                 },
                 colors = TopAppBarDefaults.mediumTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    containerColor = Color(0XffFDF4E3),
                     titleContentColor = MaterialTheme.colorScheme.primary
                 )
             )

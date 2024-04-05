@@ -71,12 +71,12 @@ fun MainScreen(navController: NavHostController) {
                     )
                 },
                 colors = TopAppBarDefaults.mediumTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    containerColor =  Color(0XffFDF4E3),
                     titleContentColor = MaterialTheme.colorScheme.primary
                 ),
                 actions = {
                     IconButton(onClick = { navController.navigate(Screen.About.route) }) {
-                        Icon(imageVector = Icons.Default.Info, contentDescription = stringResource(R.string.tentang_aplikasi))
+                        Icon(imageVector = Icons.Default.Info, contentDescription = stringResource(R.string.tentang_aplikasi), tint = MaterialTheme.colorScheme.primary)
                     }
                 }
             )
@@ -305,7 +305,7 @@ Row(
                   if(billError && yourExpenseError) return@Button
                    whoPay = whoPay(context, selectedOptionText ,bill.toFloat(), yourExpense.toFloat())
                },
-                   modifier = Modifier.weight(1f)
+                   modifier = Modifier.weight(1f),
                ) {
                    Text(text = "Pay")
                }
