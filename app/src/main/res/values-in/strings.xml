@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Assesment1</string>
+    <string name="input_invalid">%1$s Tidak boleh kosong.</string>
+    <string name="result">Tagihan: Rp. %1$s\nBiaya: Rp. %2$s\nBiaya Anda: Rp. %3$s\n%4$s harus membayar %5$s Rp. %6s.</string>
+    <string name="result_same">Tagihan: Rp. %1$s\nBiaya: Rp. %2$s\nBiaya Teman Anda: Rp. %3$s\nberutang kepada Teman Anda seimbang.</string>
+    <string name="share">Bagikan</string>
+    <string name="tentang_aplikasi">Tentang Aplikasi</string>
+    <string name="identitas_foto">Identitas Foto</string>
+    <string name="kembali">Kembali</string>
+    <string name="eat_split_description">"Eat &amp; Split" memudahkan pembagian biaya saat makan bersama teman. Pengguna dapat memasukkan nilai total tagihan, biaya pribadi, dan biaya teman, dan aplikasi akan secara otomatis menghitung dan menampilkan hasilnya. Fitur yang intuitif membantu pengguna membagi biaya dengan adil. Selain itu, dapat dengan mudah melacak riwayat transaksi.</string>
+    <string name="Nim">Nim: 6706220050</string>
+    <string name="ahmad_faza_alfarisi">Nama: Ahmad Faza Alfarisi</string>
+</resources>

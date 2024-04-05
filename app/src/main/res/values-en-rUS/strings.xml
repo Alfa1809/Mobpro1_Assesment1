@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Assesment1</string>
+    <string name="input_invalid">%1$s cannot be empty.</string>
+    <string name="result">Bill: Rp. %1$s\nExpense: Rp. %2$s\nYour Expense: Rp. %3$s\n%4$s owes %5$s Rp. %6s.</string>
+    <string name="result_same">Bill: Rp. %1$s\nExpense: Rp. %2$s\nYour Friend's Expense: Rp. %3$s\nowes your Friend are even.</string>
+    <string name="share">Share</string>
+    <string name="tentang_aplikasi">About the Application</string>
+    <string name="identitas_foto">Photo Identity</string>
+    <string name="kembali">Back</string>
+    <string name="eat_split_description">"Eat &amp; Split" makes it easy to divide expenses when dining with friends. Users can input the total bill, personal expenses, and friends' expenses, and the app will automatically calculate and display the results. Intuitive features help users divide expenses fairly. Additionally, it can easily track transaction histories.</string>
+    <string name="Nim">Nim: 6706220050</string>
+    <string name="ahmad_faza_alfarisi">Name: Ahmad Faza Alfarisi</string>
+</resources>

@@ -76,6 +76,7 @@ fun AboutScreen(navController: NavHostController) {
                     .size(250.dp)
                     .clip(CircleShape)
                     .align(Alignment.CenterHorizontally), contentScale = ContentScale.Crop)
+           Spacer(modifier = Modifier.size(15.dp))
            Text(text = stringResource(R.string.ahmad_faza_alfarisi), style = MaterialTheme.typography.titleMedium, modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
            Spacer(modifier = Modifier.size(15.dp))
            Text(text = stringResource(R.string.Nim), style = MaterialTheme.typography.titleMedium, modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
