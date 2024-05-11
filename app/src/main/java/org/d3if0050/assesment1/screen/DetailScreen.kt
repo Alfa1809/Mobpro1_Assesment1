@@ -14,8 +14,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Share
+import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -49,7 +50,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import org.d3if0050.assesment1.R
-import org.d3if0050.assesment1.navigation.Screen
 import java.text.NumberFormat
 import java.util.Currency
 import java.util.Locale
@@ -64,31 +64,39 @@ fun DetailScreen(navController: NavHostController) {
     var bill by rememberSaveable { mutableStateOf("") }
     var expense by rememberSaveable { mutableStateOf("") }
     var friendExpense by rememberSaveable { mutableStateOf("") }
-    var whoPay by rememberSaveable { mutableStateOf(Pay.YOU.toString()) }
+    var whoPay by rememberSaveable { mutableStateOf(Pay.ME.toString()) }
     var resultPay by rememberSaveable { mutableStateOf("") }
 
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = stringResource(R.string.kembali),
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                },
                 title = {
-                    Image(
-                        painter = painterResource(id = R.drawable.screenshot_2024_04_03_115020_removebg_preview),
-                        contentDescription = "",
-                        modifier = Modifier.size(80.dp)
-                    )
+                  Text(text = stringResource(id = R.string.tambah_bill))
                 },
                 colors = TopAppBarDefaults.mediumTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
                 ),
                 actions = {
-                    IconButton(onClick = { navController.navigate(Screen.About.route) }) {
-                        Icon(
-                            imageVector = Icons.Default.Info,
-                            contentDescription = stringResource(R.string.tentang_aplikasi),
-                            tint = MaterialTheme.colorScheme.primary
-                        )
-                    }
+                    IconButton(onClick = {
+
+                    navController.popBackStack()
+                }) {
+                    Icon(
+                        imageVector = Icons.Outlined.Check,
+                        contentDescription = stringResource(R.string.simpan),
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                }
                 }
             )
         },
@@ -140,7 +148,7 @@ fun DetailScreen(navController: NavHostController) {
 }
 
 enum class Pay {
-    YOU,
+    ME,
     FRIEND
 }
 
@@ -485,7 +493,7 @@ fun whoPay(context: Context, pay: Pay, bill: Float, expense: Float): String {
                 )
             }
 
-            Pay.YOU -> {
+            Pay.ME -> {
                 context.getString(
                     R.string.result,
                     (bill).toString(),

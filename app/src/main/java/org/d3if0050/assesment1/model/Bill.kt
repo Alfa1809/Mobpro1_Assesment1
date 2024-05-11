@@ -7,6 +7,6 @@ data class Bill (
     val expense: Float,
     val friendExpense: Float,
     val totalBill: Float,
-    val date: Date? = Date(),
+    val date: Date,
     val whoPay: String
 )

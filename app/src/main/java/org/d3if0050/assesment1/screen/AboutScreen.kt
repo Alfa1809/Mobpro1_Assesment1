@@ -23,13 +23,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import org.d3if0050.assesment1.R
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -51,36 +52,61 @@ fun AboutScreen(navController: NavHostController) {
                     Text(text = stringResource(id = R.string.tentang_aplikasi))
                 },
                 colors = TopAppBarDefaults.mediumTopAppBarColors(
-                    containerColor = Color(0XffFDF4E3),
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
                     titleContentColor = MaterialTheme.colorScheme.primary
                 )
             )
         }
-    ) {padding ->
-       Column(
-           modifier = Modifier
-               .padding(padding)
-               .padding(16.dp)
-               .background(
-                   Color(0XffFDF4E3),
-                   RoundedCornerShape(10.dp)
-               )
-               .fillMaxWidth()
-               .padding(24.dp)
-       ) {
-            Image(painter = painterResource(id = R.drawable.whatsapp_image_2024_04_05_at_9_50_44_am), contentDescription = stringResource(
-                R.string.identitas_foto
-            ),
+    ) { padding ->
+        Column(
+            modifier = Modifier
+                .padding(padding)
+                .padding(16.dp)
+                .background(
+                    MaterialTheme.colorScheme.primary,
+                    RoundedCornerShape(10.dp)
+                )
+                .fillMaxWidth()
+                .padding(24.dp)
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.whatsapp_image_2024_04_05_at_9_50_44_am),
+                contentDescription = stringResource(
+                    R.string.identitas_foto
+                ),
                 Modifier
                     .size(250.dp)
                     .clip(CircleShape)
-                    .align(Alignment.CenterHorizontally), contentScale = ContentScale.Crop)
-           Spacer(modifier = Modifier.size(15.dp))
-           Text(text = stringResource(R.string.ahmad_faza_alfarisi), style = MaterialTheme.typography.titleMedium, modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
-           Spacer(modifier = Modifier.size(15.dp))
-           Text(text = stringResource(R.string.Nim), style = MaterialTheme.typography.titleMedium, modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
-           Spacer(modifier = Modifier.size(15.dp))
-           Text(text = stringResource(id = R.string.eat_split_description))
-       }
+                    .align(Alignment.CenterHorizontally),
+                contentScale = ContentScale.Crop
+            )
+            Spacer(modifier = Modifier.size(15.dp))
+            Text(
+                text = stringResource(R.string.ahmad_faza_alfarisi),
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colorScheme.onPrimary
+            )
+            Spacer(modifier = Modifier.size(15.dp))
+            Text(
+                text = stringResource(R.string.Nim),
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colorScheme.onPrimary
+            )
+            Spacer(modifier = Modifier.size(15.dp))
+            Text(
+                text = stringResource(id = R.string.eat_split_description),
+                color = MaterialTheme.colorScheme.onPrimary
+            )
+        }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PrevAbout() {
+    AboutScreen(navController = rememberNavController())
 }
