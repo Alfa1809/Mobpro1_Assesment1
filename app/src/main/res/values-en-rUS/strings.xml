@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources> <string name="app_name">Assesment1</string>
+<resources>
+    <string name="app_name">Assesment1</string>
     <string name="input_invalid">%1$s cannot be empty.</string>
-    <string name="result">Bill: Rp. %1$s\nYour Expense: Rp. %2$s\nYour Friend\'s Expense: Rp. %3$s\n%4$s owes %5$s Rp. %6$s.</string>
-    <string name="result_same">Bill: RP. %1$s\nExpense: Rp. %2$s\nYour Friend\'s Expense: Rp. %3$s\nowes your Friend are even.</string>
+    <string name="result">Bill: Rp. %1$s\nYour Expense: Rp. %2$s\nYour Friend\'s Expense: Rp. %3$s\n%4$s must pay %5$s amounting to Rp. %6$s.</string>
+    <string name="result_same">Bill: Rp. %1$s\nExpense: Rp. %2$s\nYour Friend\'s Expense: Rp. %3$s\nmust pay your Friend the same.</string>
     <string name="share">Share</string>
     <string name="tentang_aplikasi">About the application</string>
     <string name="identitas_foto">Photo Identity</string>
@@ -10,10 +11,10 @@
     <string name="tambah_bill">Add Bill</string>
     <string name="simpan">Save</string>
     <string name="list_kosong">No bill data yet</string>
-    <string name="eat_split_description">"Eat &amp; Split" facilitates splitting costs when eating with friends. Users can input the bill, personal expenses, and friend\'s expenses, and the app will automatically calculate and display the results. Intuitive features help users divide costs fairly. Additionally, it can easily track transaction history.</string>
+    <string name="eat_split_description">"Eat &amp; Split" facilitates splitting costs when eating with friends. Users can input the bill, personal expenses, and friend\'s expenses, as well as who pays, and the app will automatically calculate and display the results. Intuitive features help users divide costs fairly. Additionally, you can also save a list of split bills by entering your friend\'s name, your bill, your expense, your friend\'s expense, and who should pay, and in the result, you can see the total amount of money you or your friend should pay.</string>
     <string name="Nim">Nim: 6706220050</string>
     <string name="ahmad_faza_alfarisi">Name: Ahmad Faza Alfarisi</string>
-    <string name="split_a_bill_with_your_friend">Split A Bill With Your Friend</string>
+    <string name="split_a_bill_with_your_friend">Split a Bill with Your Friend</string>
     <string name="friend_name">Friend\'s Name</string>
     <string name="bill_value">Bill Value</string>
     <string name="your_friend_expense">Your Friend\'s Expense</string>

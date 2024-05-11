@@ -11,7 +11,7 @@
     <string name="tambah_bill">Tambah Tagihan</string>
     <string name="simpan">Simpan</string>
     <string name="list_kosong">Belum ada data tagihan</string>
-    <string name="eat_split_description">"Eat &amp; Split" memudahkan pembagian biaya saat makan bersama teman. Pengguna dapat input tagihan, biaya pribadi, dan biaya teman, aplikasi akan otomatis hitung dan tampilkan hasil. Fitur intuitif membantu pengguna membagi biaya secara adil. Selain itu, dapat melacak riwayat transaksi dengan mudah.</string>
+    <string name="eat_split_description">"Eat &amp; Split" memudahkan pembagian biaya saat makan bersama teman. Pengguna dapat memasukkan detail tagihan, biaya pribadi, dan biaya teman, serta siapa yang membayar, dan aplikasi akan secara otomatis menghitung dan menampilkan hasilnya. Fitur intuitif membantu pengguna membagi biaya secara adil. Selain itu, Anda juga dapat menyimpan daftar pembagian tagihan dengan memasukkan nama teman, tagihan Anda, biaya Anda, biaya teman Anda, dan siapa yang harus membayar, dan pada hasilnya Anda dapat melihat total uang yang harus Anda bayar atau teman Anda bayar.</string>
     <string name="Nim">Nim: 6706220050</string>
     <string name="ahmad_faza_alfarisi">Nama: Ahmad Faza Alfarisi</string>
     <string name="split_a_bill_with_your_friend">Bagikan Tagihan dengan Teman Anda</string>
