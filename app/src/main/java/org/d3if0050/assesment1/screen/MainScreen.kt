@@ -133,7 +133,7 @@ fun ScreenContent(modifier: Modifier,  navController: NavHostController) {
         ) {
             items(data) {
                 ListItem(bill = it) {
-                    navController
+                    navController.navigate(Screen.FormUbah.withId(it.id))
                 }
             }
         }
@@ -160,7 +160,7 @@ fun ListItem(bill: Bill, modifier: Modifier = Modifier, onClick: () -> Unit) {
                 .sizeIn(minHeight = 64.dp), 
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Box(modifier = modifier.width(70.dp)) {
+            Box(modifier = modifier.fillMaxWidth()) {
                 Text(
                     text = bill.name,
                     style = MaterialTheme.typography.displaySmall,

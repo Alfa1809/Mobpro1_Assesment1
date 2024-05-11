@@ -33,6 +33,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -57,6 +58,7 @@ import org.d3if0050.assesment1.util.ViewModelFactory
 import java.text.NumberFormat
 import java.util.Currency
 import java.util.Locale
+import kotlin.math.absoluteValue
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -74,6 +76,17 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
     var whoPay by rememberSaveable { mutableIntStateOf(R.string.me) }
     var resultPay by rememberSaveable { mutableStateOf("") }
 
+    LaunchedEffect(true) {
+        if (id == null) return@LaunchedEffect
+        val data = viewModel.getOrder(id) ?: return@LaunchedEffect
+        name = data.name
+        bill = data.totalBill.absoluteValue.toInt().toString()
+        expense = data.expense.absoluteValue.toInt().toString()
+        friendExpense = data.friendExpense.toInt().toString()
+        whoPay = data.whoPay
+        resultPay = whoPay(context, whoPay, bill.toFloat(), expense.toFloat())
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -87,7 +100,7 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
                     }
                 },
                 title = {
-                  Text(text = stringResource(id = R.string.tambah_bill))
+                    Text(text = stringResource(id = R.string.tambah_bill))
                 },
                 colors = TopAppBarDefaults.mediumTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -96,27 +109,46 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
                 actions = {
                     IconButton(onClick = {
 
-                        if(name == "" || name == "0"
+                        if (name == "" || name == "0"
                             || bill == "" || bill == "0"
                             || expense == "" || expense == "0"
                             || friendExpense == "" || friendExpense == "0"
-                            ) {
-                            Toast.makeText(context, context.getString(R.string.error_cant_empty), Toast.LENGTH_SHORT).show()
+                        ) {
+                            Toast.makeText(
+                                context,
+                                context.getString(R.string.error_cant_empty),
+                                Toast.LENGTH_SHORT
+                            ).show()
                             return@IconButton
                         }
 
-                        if(id == null){
-                            viewModel.insert(name, expense.toFloat(), friendExpense.toFloat(), bill.toFloat(), whoPay)
+                        if (id == null) {
+                            viewModel.insert(
+                                name,
+                                expense.toFloat(),
+                                friendExpense.toFloat(),
+                                bill.toFloat(),
+                                whoPay
+                            )
+                        } else {
+                            viewModel.update(
+                                id,
+                                name,
+                                expense.toFloat(),
+                                friendExpense.toFloat(),
+                                bill.toFloat(),
+                                whoPay
+                            )
                         }
 
-                    navController.popBackStack()
-                }) {
-                    Icon(
-                        imageVector = Icons.Outlined.Check,
-                        contentDescription = stringResource(R.string.simpan),
-                        tint = MaterialTheme.colorScheme.primary
-                    )
-                }
+                        navController.popBackStack()
+                    }) {
+                        Icon(
+                            imageVector = Icons.Outlined.Check,
+                            contentDescription = stringResource(R.string.simpan),
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                    }
                 }
             )
         },
@@ -127,28 +159,33 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
             bill = bill,
             onBillChange = {
 
-                bill = if(it == "" || it == "0") "" else it
+                bill = if (it == "" || it == "0") "" else it
 
-                if (bill == "" || bill == "0" ||
+                if (bill == "" ||
                     expense == "" || expense == "0" ||
                     friendExpense == "" || friendExpense == "0"
                 ) return@FormSplitBill
 
-                resultPay = whoPay(context, whoPay , bill.toFloat(), expense.toFloat())
+                resultPay = whoPay(context, whoPay, bill.toFloat(), expense.toFloat())
 
             },
             expense = expense,
             onExpenseChange = {
-                if(it != ""){
-                    if(it.toFloat() > bill.toFloat()){
-                        Toast.makeText(context, context.getString(R.string.error_expense), Toast.LENGTH_SHORT).show()
+                if (it != "") {
+                    if (it.toFloat() > bill.toFloat()) {
+                        Toast.makeText(
+                            context,
+                            context.getString(R.string.error_expense),
+                            Toast.LENGTH_SHORT
+                        ).show()
                         return@FormSplitBill
                     }
                 }
 
-                expense = if(it == "" || it == "0") "" else it
+                expense = if (it == "" || it == "0") "" else it
 
-                friendExpense = if(expense == "" || expense == "0") "" else (bill.toFloat() - it.toFloat()).toString()
+                friendExpense =
+                    if (expense == "") "" else (bill.toFloat() - it.toFloat()).toString()
 
                 if (bill == "" || bill == "0" ||
                     expense == "" || expense == "0" ||
@@ -177,7 +214,7 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
                 )
             },
             resetState = {
-                         name = ""
+                name = ""
                 bill = ""
                 expense = ""
                 friendExpense = ""
@@ -451,7 +488,7 @@ fun FormSplitBill(
                     ) {
                         payByDropdown.forEach { pay ->
                             DropdownMenuItem(
-                                text = { Text(pay.toString()) },
+                                text = { Text(stringResource(id = pay)) },
                                 onClick = {
                                     onPayChange(pay)
                                     expanded = false
@@ -547,6 +584,7 @@ fun whoPay(context: Context, pay: Int, bill: Float, expense: Float): String {
         }
     }
 }
+
 
 private fun shareData(context: Context, message: String) {
     val shareIntent = Intent(Intent.ACTION_SEND).apply {
