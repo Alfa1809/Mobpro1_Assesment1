@@ -8,11 +8,6 @@ import androidx.navigation.compose.rememberNavController
 import org.d3if0050.assesment1.screen.AboutScreen
 import org.d3if0050.assesment1.screen.MainScreen
 
-sealed class Screen(val route: String) {
-    data object Home: Screen("mainScreen")
-    data object About: Screen("aboutScreen")
-}
-
 @Composable
 fun SetUpNavGraph(navController: NavHostController = rememberNavController()) {
     NavHost(
