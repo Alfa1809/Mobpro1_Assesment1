@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Assesment1</string>
     <string name="input_invalid">%1$s Tidak boleh kosong.</string>
-    <string name="result">Bill : Rp. %1$s\nExpense: Rp. %2$s\nYour Expense: Rp. %3$s\n%4$s owes %5$s Rp. %6s.</string>
+    <string name="result">Bill : Rp. %1$s\nYour Expense: Rp. %2$s\nYour Friend Expense: Rp. %3$s\n%4$s owes %5$s Rp. %6$s.</string>
     <string name="result_same">Bill : RP. %1$s\nExpense: Rp. %2$s\nYour Friend Expense: Rp. %3$s\n owes your Friend are even.</string>
     <string name="share">Share</string>
     <string name="tentang_aplikasi">Tentang aplikasi</string>
@@ -19,4 +19,6 @@
     <string name="your_friend_expense">Your Friend Expense</string>
     <string name="me">Me</string>
     <string name="friend">Friend</string>
+    <string name="error_cant_empty">Name, Bill, and Expense can\'t be empty</string>
+    <string name="error_expense">Expense cant more than bill value</string>
 </resources>

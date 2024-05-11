@@ -164,7 +164,8 @@ fun ListItem(bill: Bill, modifier: Modifier = Modifier, onClick: () -> Unit) {
                 Text(
                     text = bill.name,
                     style = MaterialTheme.typography.displaySmall,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
             Row(

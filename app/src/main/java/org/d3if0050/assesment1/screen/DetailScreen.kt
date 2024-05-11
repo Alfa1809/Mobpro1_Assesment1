@@ -2,6 +2,7 @@ package org.d3if0050.assesment1.screen
 
 import android.content.Context
 import android.content.Intent
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -18,7 +19,6 @@ import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -43,13 +43,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import org.d3if0050.assesment1.R
+import org.d3if0050.assesment1.database.BillDb
+import org.d3if0050.assesment1.util.ViewModelFactory
 import java.text.NumberFormat
 import java.util.Currency
 import java.util.Locale
@@ -59,6 +63,9 @@ import java.util.Locale
 fun DetailScreen(navController: NavHostController, id: Long? = null) {
 
     val context = LocalContext.current
+    val db = BillDb.getInstance(context)
+    val factory = ViewModelFactory(db.dao)
+    val viewModel: DetailViewModel = viewModel(factory = factory)
 
     var name by rememberSaveable { mutableStateOf("") }
     var bill by rememberSaveable { mutableStateOf("") }
@@ -89,6 +96,19 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
                 actions = {
                     IconButton(onClick = {
 
+                        if(name == "" || name == "0"
+                            || bill == "" || bill == "0"
+                            || expense == "" || expense == "0"
+                            || friendExpense == "" || friendExpense == "0"
+                            ) {
+                            Toast.makeText(context, context.getString(R.string.error_cant_empty), Toast.LENGTH_SHORT).show()
+                            return@IconButton
+                        }
+
+                        if(id == null){
+                            viewModel.insert(name, expense.toFloat(), friendExpense.toFloat(), bill.toFloat(), whoPay)
+                        }
+
                     navController.popBackStack()
                 }) {
                     Icon(
@@ -106,7 +126,8 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
             onNameChange = { name = it },
             bill = bill,
             onBillChange = {
-                bill = it
+
+                bill = if(it == "" || it == "0") "" else it
 
                 if (bill == "" || bill == "0" ||
                     expense == "" || expense == "0" ||
@@ -118,8 +139,16 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
             },
             expense = expense,
             onExpenseChange = {
-                expense = it
-                friendExpense = (bill.toFloat() - it.toFloat()).toString()
+                if(it != ""){
+                    if(it.toFloat() > bill.toFloat()){
+                        Toast.makeText(context, context.getString(R.string.error_expense), Toast.LENGTH_SHORT).show()
+                        return@FormSplitBill
+                    }
+                }
+
+                expense = if(it == "" || it == "0") "" else it
+
+                friendExpense = if(expense == "" || expense == "0") "" else (bill.toFloat() - it.toFloat()).toString()
 
                 if (bill == "" || bill == "0" ||
                     expense == "" || expense == "0" ||
@@ -234,14 +263,10 @@ fun FormSplitBill(
                         unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
                         focusedTextColor = MaterialTheme.colorScheme.onSurface
                     ),
-
-                    leadingIcon = {
-                        Text(text = "Rp.")
-                    },
-                    placeholder = { Text(text = "0") },
+                    singleLine = true,
                     shape = RoundedCornerShape(10.dp),
                     keyboardOptions = KeyboardOptions.Default.copy(
-                        keyboardType = KeyboardType.Number,
+                        capitalization = KeyboardCapitalization.Words,
                         imeAction = ImeAction.Next
                     )
                 )
@@ -282,6 +307,7 @@ fun FormSplitBill(
                     leadingIcon = {
                         Text(text = "Rp.")
                     },
+                    singleLine = true,
                     placeholder = { Text(text = "0") },
                     shape = RoundedCornerShape(10.dp),
                     keyboardOptions = KeyboardOptions.Default.copy(
@@ -326,6 +352,7 @@ fun FormSplitBill(
                     leadingIcon = {
                         Text(text = "Rp.")
                     },
+                    singleLine = true,
                     placeholder = { Text(text = "0") },
                     shape = RoundedCornerShape(10.dp),
                     keyboardOptions = KeyboardOptions.Default.copy(
@@ -366,6 +393,7 @@ fun FormSplitBill(
                     leadingIcon = {
                         Text(text = "Rp.")
                     },
+                    singleLine = true,
                     colors = OutlinedTextFieldDefaults.colors(
                         unfocusedContainerColor = MaterialTheme.colorScheme.surface,
                         focusedContainerColor = MaterialTheme.colorScheme.surface,
@@ -496,10 +524,10 @@ fun whoPay(context: Context, pay: Int, bill: Float, expense: Float): String {
                     R.string.result,
                     (bill).toString(),
                     (expense).toString(),
-                    (bill - expense).toString(),
-                    "your friend",
+                    formatter.format(bill - expense),
                     "you",
-                    (bill - expense).toString()
+                    "your friend",
+                    formatter.format(bill - expense)
                 )
             }
 
@@ -511,7 +539,7 @@ fun whoPay(context: Context, pay: Int, bill: Float, expense: Float): String {
                     formatter.format(bill - expense),
                     "you",
                     "your friend",
-                    (bill - expense).toString()
+                    formatter.format(bill - expense)
                 )
             }
 

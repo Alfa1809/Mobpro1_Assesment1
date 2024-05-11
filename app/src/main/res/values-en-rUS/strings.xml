@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">Assesment!</string>
     <string name="input_invalid">%1$s cannot be empty.</string>
-    <string name="result">Bill: Rp. %1$s\nExpense: Rp. %2$s\nYour Expense: Rp. %3$s\n%4$s owes %5$s Rp. %6s.</string>
+    <string name="result">Bill: Rp. %1$s\nExpense: Rp. %2$s\nYour Friend Expense: Rp. %3$s\n%4$s owes %5$s Rp. %6$s.</string>
     <string name="result_same">Bill: Rp. %1$s\nExpense: Rp. %2$s\nYour Friend\'s Expense: Rp. %3$s\nowes your Friend are even.</string>
     <string name="share">Share</string>
     <string name="tentang_aplikasi">About the Application</string>
