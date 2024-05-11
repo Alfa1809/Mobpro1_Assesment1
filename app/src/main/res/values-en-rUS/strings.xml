@@ -10,6 +10,7 @@
     <string name="kembali">Back</string>
     <string name="tambah_bill">Add Bill</string>
     <string name="simpan">Save</string>
+    <string name="edit_bill">Edit Bill</string>
     <string name="list_kosong">No bill data yet</string>
     <string name="eat_split_description">"Eat &amp; Split" facilitates splitting costs when eating with friends. Users can input the bill, personal expenses, and friend\'s expenses, as well as who pays, and the app will automatically calculate and display the results. Intuitive features help users divide costs fairly. Additionally, you can also save a list of split bills by entering your friend\'s name, your bill, your expense, your friend\'s expense, and who should pay, and in the result, you can see the total amount of money you or your friend should pay.</string>
     <string name="Nim">Nim: 6706220050</string>
@@ -30,4 +31,6 @@
     <string name="hapus">Delete Bill</string>
     <string name="light">Light</string>
     <string name="dark">Dark</string>
+    <string name="you">You</string>
+    <string name="your_friend">Your Friend</string>
 </resources>

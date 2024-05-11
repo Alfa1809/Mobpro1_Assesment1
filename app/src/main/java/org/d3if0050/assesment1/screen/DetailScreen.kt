@@ -108,7 +108,11 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
                     }
                 },
                 title = {
-                    Text(text = stringResource(id = R.string.tambah_bill))
+                   if(id == null){
+                       Text(text = stringResource(id = R.string.tambah_bill))
+                   } else {
+                       Text(text = stringResource(id = R.string.edit_bill))
+                   }
                 },
                 colors = TopAppBarDefaults.mediumTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -233,7 +237,7 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
                     friendExpense == "" || friendExpense == "0"
                 ) return@FormSplitBill
 
-                resultPay = whoPay(context, whoPay, bill.toFloat(), expense.toFloat())
+               resultPay = whoPay(context, whoPay, bill.toFloat(), expense.toFloat())
             },
             shareData = {
                 shareData(
@@ -591,8 +595,8 @@ fun whoPay(context: Context, pay: Int, bill: Float, expense: Float): String {
                     (bill).toString(),
                     (expense).toString(),
                     formatter.format(bill - expense),
-                    "you",
-                    "your friend",
+                    context.getString(R.string.your_friend),
+                    context.getString(R.string.you),
                     formatter.format(bill - expense)
                 )
             }
@@ -603,8 +607,8 @@ fun whoPay(context: Context, pay: Int, bill: Float, expense: Float): String {
                     (bill).toString(),
                     (expense).toString(),
                     formatter.format(bill - expense),
-                    "you",
-                    "your friend",
+                    context.getString(R.string.you),
+                    context.getString(R.string.your_friend),
                     formatter.format(bill - expense)
                 )
             }
