@@ -16,14 +16,12 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Share
-import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.ExposedDropdownMenuDefaults.TrailingIcon
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -40,7 +38,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -60,6 +57,16 @@ import java.util.Locale
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailScreen(navController: NavHostController) {
+
+    val context = LocalContext.current
+
+    var name by rememberSaveable { mutableStateOf("") }
+    var bill by rememberSaveable { mutableStateOf("") }
+    var expense by rememberSaveable { mutableStateOf("") }
+    var friendExpense by rememberSaveable { mutableStateOf("") }
+    var whoPay by rememberSaveable { mutableStateOf(Pay.YOU.toString()) }
+    var resultPay by rememberSaveable { mutableStateOf("") }
+
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -71,56 +78,84 @@ fun DetailScreen(navController: NavHostController) {
                     )
                 },
                 colors = TopAppBarDefaults.mediumTopAppBarColors(
-                    containerColor =  Color(0XffFDF4E3),
-                    titleContentColor = MaterialTheme.colorScheme.primary
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
                 ),
                 actions = {
                     IconButton(onClick = { navController.navigate(Screen.About.route) }) {
-                        Icon(imageVector = Icons.Default.Info, contentDescription = stringResource(R.string.tentang_aplikasi), tint = MaterialTheme.colorScheme.primary)
+                        Icon(
+                            imageVector = Icons.Default.Info,
+                            contentDescription = stringResource(R.string.tentang_aplikasi),
+                            tint = MaterialTheme.colorScheme.primary
+                        )
                     }
                 }
             )
         },
-    ) {padding ->
-        FormSplitBill(Modifier.padding(padding))
+    ) { padding ->
+        FormSplitBill(
+            name = name,
+            onNameChange = { name = it },
+            bill = bill,
+            onBillChange = {
+                bill = it
+
+                if (bill == "" || bill == "0" ||
+                    expense == "" || expense == "0" ||
+                    friendExpense == "" || friendExpense == "0"
+                ) return@FormSplitBill
+
+                resultPay = whoPay(context, Pay.valueOf(whoPay), bill.toFloat(), expense.toFloat())
+
+            },
+            expense = expense,
+            onExpenseChange = {
+                expense = it
+                friendExpense = (bill.toFloat() - it.toFloat()).toString()
+
+                if (bill == "" || bill == "0" ||
+                    expense == "" || expense == "0" ||
+                    friendExpense == "" || friendExpense == "0"
+                ) return@FormSplitBill
+
+                resultPay = whoPay(context, Pay.valueOf(whoPay), bill.toFloat(), expense.toFloat())
+            },
+            friendExpense = friendExpense,
+            whoPay = whoPay,
+            resultPay = resultPay,
+            onPayChange = {
+                whoPay = it
+
+                if (bill == "" || bill == "0" ||
+                    expense == "" || expense == "0" ||
+                    friendExpense == "" || friendExpense == "0"
+                ) return@FormSplitBill
+
+                resultPay = whoPay(context, Pay.valueOf(whoPay), bill.toFloat(), expense.toFloat())
+            },
+            context = context,
+            modifier = Modifier.padding(padding)
+        )
     }
 }
 
-enum class Pay{
+enum class Pay {
     YOU,
     FRIEND
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FormSplitBill(modifier: Modifier){
+fun FormSplitBill(
+    name: String, onNameChange: (String) -> Unit,
+    bill: String, onBillChange: (String) -> Unit,
+    expense: String, onExpenseChange: (String) -> Unit,
+    friendExpense: String, resultPay: String,
+    whoPay: String, onPayChange: (String) -> Unit,
+    context: Context,
+    modifier: Modifier
+) {
     var expanded by rememberSaveable { mutableStateOf(false) }
-    var selectedOptionText by rememberSaveable { mutableStateOf(Pay.YOU) }
-
-    var bill by rememberSaveable {
-        mutableStateOf("")
-    }
-    var billError by rememberSaveable {
-        mutableStateOf(false)
-    }
-
-    var yourExpense by rememberSaveable {
-        mutableStateOf("")
-    }
-    var yourExpenseError by rememberSaveable {
-        mutableStateOf(false)
-    }
-
-    var friendExpense by rememberSaveable {
-        mutableStateOf("")
-    }
-
-
-    var whoPay by rememberSaveable {
-        mutableStateOf("")
-    }
-
-    val context = LocalContext.current
 
     Column(
         modifier = modifier
@@ -129,21 +164,68 @@ fun FormSplitBill(modifier: Modifier){
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Text(
-            text = "Split A Bill With Your Friend",
+            text = stringResource(R.string.split_a_bill_with_your_friend),
             style = MaterialTheme.typography.headlineSmall,
             textAlign = TextAlign.Center,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            color = MaterialTheme.colorScheme.onSurface
         )
         Column(
             modifier = Modifier
                 .background(
-                    Color(0XffFDF4E3),
+                    MaterialTheme.colorScheme.primary,
                     RoundedCornerShape(10.dp)
                 )
                 .fillMaxWidth()
                 .padding(24.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Row(
+                    modifier = Modifier.weight(2f),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(text = "🤵", style = MaterialTheme.typography.headlineSmall)
+                    Text(
+                        text = stringResource(R.string.friend_name),
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
+                }
+                OutlinedTextField(
+                    value = name,
+                    onValueChange = {
+                        onNameChange(it)
+                    },
+                    modifier = Modifier.weight(2f),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                        focusedContainerColor = MaterialTheme.colorScheme.surface,
+                        unfocusedLeadingIconColor = MaterialTheme.colorScheme.onSurface,
+                        focusedLeadingIconColor = MaterialTheme.colorScheme.onSurface,
+                        focusedPlaceholderColor = MaterialTheme.colorScheme.onSurface,
+                        unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSurface,
+                        unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                        focusedTextColor = MaterialTheme.colorScheme.onSurface
+                    ),
+
+                    leadingIcon = {
+                        Text(text = "Rp.")
+                    },
+                    placeholder = { Text(text = "0") },
+                    shape = RoundedCornerShape(10.dp),
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        keyboardType = KeyboardType.Number,
+                        imeAction = ImeAction.Next
+                    )
+                )
+            }
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
@@ -154,25 +236,32 @@ fun FormSplitBill(modifier: Modifier){
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(text = "💰", style = MaterialTheme.typography.headlineSmall)
-                    Text(text = "Bill Value", style = MaterialTheme.typography.labelLarge)
+                    Text(
+                        text = stringResource(R.string.bill_value),
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
                 }
                 OutlinedTextField(
                     value = bill,
                     onValueChange = {
-                        bill = it
+                        onBillChange(it)
                     },
                     modifier = Modifier.weight(2f),
                     colors = OutlinedTextFieldDefaults.colors(
-                        unfocusedContainerColor = Color.White,
-                        unfocusedBorderColor = Color.Transparent,
-                        focusedBorderColor = Color.Transparent
+                        unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                        focusedContainerColor = MaterialTheme.colorScheme.surface,
+                        unfocusedLeadingIconColor = MaterialTheme.colorScheme.onSurface,
+                        focusedLeadingIconColor = MaterialTheme.colorScheme.onSurface,
+                        focusedPlaceholderColor = MaterialTheme.colorScheme.onSurface,
+                        unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSurface,
+                        unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                        focusedTextColor = MaterialTheme.colorScheme.onSurface
                     ),
-                    supportingText = { ErrorHint(billError, "Bill") },
-                    isError = billError,
                     leadingIcon = {
-                        IconPicker(billError, "Rp.")
+                        Text(text = "Rp.")
                     },
-                    placeholder = { Text(text = "0" ) },
+                    placeholder = { Text(text = "0") },
                     shape = RoundedCornerShape(10.dp),
                     keyboardOptions = KeyboardOptions.Default.copy(
                         keyboardType = KeyboardType.Number,
@@ -191,28 +280,32 @@ fun FormSplitBill(modifier: Modifier){
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(text = "🕴️", style = MaterialTheme.typography.headlineSmall)
-                    Text(text = "Your Expense", style = MaterialTheme.typography.labelLarge)
+                    Text(
+                        text = "Your Expense",
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
                 }
                 OutlinedTextField(
-                    value = yourExpense,
+                    value = expense,
                     onValueChange = {
-                        yourExpense = it
-                        if(bill.toFloat() > 0f && yourExpense.toFloat() != 0f){
-                            friendExpense = (bill.toFloat() - it.toFloat()).toString()
-                        }
+                        onExpenseChange(it)
                     },
-                    supportingText = { ErrorHint(yourExpenseError, "Your Expense") },
                     modifier = Modifier.weight(2f),
                     colors = OutlinedTextFieldDefaults.colors(
-                        unfocusedContainerColor = Color.White,
-                        unfocusedBorderColor = Color.Transparent,
-                        focusedBorderColor = Color.Transparent
+                        unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                        focusedContainerColor = MaterialTheme.colorScheme.surface,
+                        unfocusedLeadingIconColor = MaterialTheme.colorScheme.onSurface,
+                        focusedLeadingIconColor = MaterialTheme.colorScheme.onSurface,
+                        focusedPlaceholderColor = MaterialTheme.colorScheme.onSurface,
+                        unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSurface,
+                        unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                        focusedTextColor = MaterialTheme.colorScheme.onSurface
                     ),
-                    isError = yourExpenseError,
                     leadingIcon = {
-                        IconPicker(yourExpenseError, "Rp.")
+                        Text(text = "Rp.")
                     },
-                    placeholder = { Text(text = "0" ) },
+                    placeholder = { Text(text = "0") },
                     shape = RoundedCornerShape(10.dp),
                     keyboardOptions = KeyboardOptions.Default.copy(
                         keyboardType = KeyboardType.Number,
@@ -220,6 +313,7 @@ fun FormSplitBill(modifier: Modifier){
                     )
                 )
             }
+
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -231,14 +325,18 @@ fun FormSplitBill(modifier: Modifier){
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(text = "🧑‍🤝‍🧑", style = MaterialTheme.typography.headlineSmall)
-                    Text(text = "Your Friend Expense", style = MaterialTheme.typography.labelLarge)
+                    Text(
+                        text = stringResource(R.string.your_friend_expense),
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
                 }
                 OutlinedTextField(
                     value = friendExpense,
                     onValueChange = {},
                     modifier = Modifier.weight(2f),
                     readOnly = true,
-                    placeholder = { Text(text = "0" ) },
+                    placeholder = { Text(text = "0") },
                     shape = RoundedCornerShape(10.dp),
                     keyboardOptions = KeyboardOptions.Default.copy(
                         keyboardType = KeyboardType.Number,
@@ -247,7 +345,16 @@ fun FormSplitBill(modifier: Modifier){
                     leadingIcon = {
                         Text(text = "Rp.")
                     },
-                    colors = ExposedDropdownMenuDefaults.textFieldColors(),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                        focusedContainerColor = MaterialTheme.colorScheme.surface,
+                        unfocusedLeadingIconColor = MaterialTheme.colorScheme.onSurface,
+                        focusedLeadingIconColor = MaterialTheme.colorScheme.onSurface,
+                        focusedPlaceholderColor = MaterialTheme.colorScheme.onSurface,
+                        unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSurface,
+                        unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                        focusedTextColor = MaterialTheme.colorScheme.onSurface
+                    ),
                 )
             }
 
@@ -261,7 +368,11 @@ fun FormSplitBill(modifier: Modifier){
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(text = "🤑", style = MaterialTheme.typography.headlineSmall)
-                    Text(text = "Who Is Paying \nThe Bill", style = MaterialTheme.typography.labelLarge)
+                    Text(
+                        text = "Who Is Paying \nThe Bill",
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
                 }
                 ExposedDropdownMenuBox(
                     expanded = expanded,
@@ -271,13 +382,18 @@ fun FormSplitBill(modifier: Modifier){
                     OutlinedTextField(
                         modifier = Modifier.menuAnchor(),
                         readOnly = true,
-                        value = selectedOptionText.toString(),
+                        value = whoPay,
                         onValueChange = {},
                         trailingIcon = { TrailingIcon(expanded = expanded) },
                         colors = OutlinedTextFieldDefaults.colors(
-                            unfocusedContainerColor = Color.White,
-                            unfocusedBorderColor = Color.Transparent,
-                            focusedBorderColor = Color.Transparent
+                            unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                            focusedContainerColor = MaterialTheme.colorScheme.surface,
+                            unfocusedLeadingIconColor = MaterialTheme.colorScheme.onSurface,
+                            focusedLeadingIconColor = MaterialTheme.colorScheme.onSurface,
+                            focusedPlaceholderColor = MaterialTheme.colorScheme.onSurface,
+                            unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSurface,
+                            unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                            focusedTextColor = MaterialTheme.colorScheme.onSurface
                         ),
                     )
                     ExposedDropdownMenu(
@@ -288,7 +404,7 @@ fun FormSplitBill(modifier: Modifier){
                             DropdownMenuItem(
                                 text = { Text(pay.toString()) },
                                 onClick = {
-                                    selectedOptionText = pay
+                                    onPayChange(pay.toString())
                                     expanded = false
                                 },
                             )
@@ -299,29 +415,14 @@ fun FormSplitBill(modifier: Modifier){
             Row(
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Button(onClick = {
-                    billError = (bill == "" || bill == "0")
-                    yourExpenseError = (yourExpense == "" || yourExpense == "0")
-                    if(billError && yourExpenseError) return@Button
-                    whoPay = whoPay(context, selectedOptionText ,bill.toFloat(), yourExpense.toFloat())
-                },
-                    modifier = Modifier.weight(1f),
-                ) {
-                    Text(text = "Pay")
-                }
+                Button(
+                    onClick = {
 
-                Button(onClick = {
-                    bill = ""
-                    yourExpense = ""
-                    friendExpense = ""
-                    whoPay = ""
-                    selectedOptionText = Pay.FRIEND
-                    billError = false
-                    yourExpenseError = false
-                },
+                    },
                     modifier = Modifier.weight(1f),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.Gray,
+                        containerColor = MaterialTheme.colorScheme.tertiary,
+                        contentColor = MaterialTheme.colorScheme.onTertiary
                     )
                 ) {
                     Text(text = "Reset")
@@ -329,42 +430,33 @@ fun FormSplitBill(modifier: Modifier){
             }
         }
 
-        if(whoPay != ""){
+        if (resultPay != "") {
             Column(
                 modifier = Modifier
                     .background(
-                        Color(0XffFDF4E3),
+                        MaterialTheme.colorScheme.primary,
                         RoundedCornerShape(10.dp)
                     )
                     .fillMaxWidth()
                     .padding(24.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
-            ){
-                Text(text = whoPay)
+            ) {
+                Text(text = resultPay, color = MaterialTheme.colorScheme.onPrimary)
                 Spacer(modifier = Modifier.size(10.dp))
                 IconButton(onClick = {
-                    shareData(context, whoPay(context, selectedOptionText ,bill.toFloat(), yourExpense.toFloat()))
+                    shareData(
+                        context,
+                        whoPay(context, Pay.valueOf(whoPay), bill.toFloat(), expense.toFloat())
+                    )
                 }, modifier = Modifier.fillMaxWidth()) {
-                    Icon(imageVector = Icons.Default.Share, contentDescription = stringResource(R.string.share))
+                    Icon(
+                        imageVector = Icons.Default.Share,
+                        contentDescription = stringResource(R.string.share),
+                        tint = MaterialTheme.colorScheme.onPrimary
+                    )
                 }
             }
         }
-    }
-}
-
-@Composable
-fun IconPicker(isError: Boolean, unit: String) {
-    if (isError) {
-        Icon(imageVector = Icons.Filled.Warning, contentDescription = null)
-    } else {
-        Text(text = unit)
-    }
-}
-
-@Composable
-fun ErrorHint(isError: Boolean, nameError: String) {
-    if (isError) {
-        Text(text = stringResource(id = R.string.input_invalid, nameError))
     }
 }
 
@@ -373,14 +465,36 @@ fun whoPay(context: Context, pay: Pay, bill: Float, expense: Float): String {
     formatter.currency = Currency.getInstance("IDR")
 
     return if (expense == bill - expense) {
-        context.getString(R.string.result_same, formatter.format(bill), formatter.format(expense), formatter.format(bill - expense))
+        context.getString(
+            R.string.result_same,
+            formatter.format(bill),
+            formatter.format(expense),
+            formatter.format(bill - expense)
+        )
     } else {
         when (pay) {
             Pay.FRIEND -> {
-                context.getString(R.string.result, (bill).toString(), (expense).toString(), (bill - expense).toString(), "your friend", "you",  (bill - expense).toString())
+                context.getString(
+                    R.string.result,
+                    (bill).toString(),
+                    (expense).toString(),
+                    (bill - expense).toString(),
+                    "your friend",
+                    "you",
+                    (bill - expense).toString()
+                )
             }
+
             Pay.YOU -> {
-                context.getString(R.string.result, (bill).toString(), (expense).toString(), formatter.format(bill - expense), "you", "your friend", (bill - expense).toString())
+                context.getString(
+                    R.string.result,
+                    (bill).toString(),
+                    (expense).toString(),
+                    formatter.format(bill - expense),
+                    "you",
+                    "your friend",
+                    (bill - expense).toString()
+                )
             }
         }
     }
@@ -396,9 +510,23 @@ private fun shareData(context: Context, message: String) {
     }
 }
 
+fun formatCurrency(amount: Float): String {
+    val formatter = NumberFormat.getCurrencyInstance(Locale("IND", "ID"))
+    formatter.currency = Currency.getInstance("IDR")
+    return formatter.format(amount)
+}
+
+fun parseCurrency(currencyString: String): Float {
+    val formatter =
+        NumberFormat.getCurrencyInstance(Locale("id", "ID")) // Use "id" instead of "IND"
+    formatter.currency = Currency.getInstance("IDR")
+    val parsedNumber = formatter.parse(currencyString)
+    return parsedNumber?.toFloat() ?: 0f
+}
+
 
 @Preview(showBackground = true)
 @Composable
-fun PrevDetail(){
+fun PrevDetail() {
     DetailScreen(rememberNavController())
 }

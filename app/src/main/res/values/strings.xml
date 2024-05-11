@@ -10,4 +10,8 @@
     <string name="eat_split_description">"Eat &amp; Split" memudahkan pembagian biaya saat makan bersama teman. Pengguna dapat input tagihan, biaya pribadi, dan biaya teman, aplikasi akan otomatis hitung dan tampilkan hasil. Fitur intuitif membantu pengguna membagi biaya secara adil. Selain itu, dapat melacak riwayat transaksi dengan mudah.</string>
     <string name="Nim">Nim: 6706220050</string>
     <string name="ahmad_faza_alfarisi">Nama: Ahmad Faza Alfarisi</string>
+    <string name="split_a_bill_with_your_friend">Split A Bill With Your Friend</string>
+    <string name="friend_name">Friend Name</string>
+    <string name="bill_value">Bill Value</string>
+    <string name="your_friend_expense">Your Friend Expense</string>
 </resources>
