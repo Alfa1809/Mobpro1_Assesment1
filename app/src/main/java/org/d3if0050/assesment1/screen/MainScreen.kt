@@ -32,23 +32,30 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import org.d3if0050.assesment1.R
+import org.d3if0050.assesment1.database.BillDb
 import org.d3if0050.assesment1.model.Bill
 import org.d3if0050.assesment1.navigation.Screen
+import org.d3if0050.assesment1.util.ViewModelFactory
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
+const val KEY_ID_BILL = "idBill"
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(navController: NavHostController) {
@@ -91,13 +98,17 @@ fun MainScreen(navController: NavHostController) {
             }
         }
     ) { padding ->
-        ScreenContent(Modifier.padding(padding))
+        ScreenContent(Modifier.padding(padding), navController)
     }
 }
 
 @Composable
-fun ScreenContent(modifier: Modifier) {
-    val data = emptyList<Bill>()
+fun ScreenContent(modifier: Modifier,  navController: NavHostController) {
+    val context = LocalContext.current
+    val db = BillDb.getInstance(context)
+    val factory = ViewModelFactory(db.dao)
+    val viewModel: MainViewModel = viewModel(factory = factory)
+    val data by viewModel.data.collectAsState()
 
     if (data.isEmpty()) {
         Column(
@@ -121,7 +132,9 @@ fun ScreenContent(modifier: Modifier) {
             contentPadding = PaddingValues(bottom = 84.dp)
         ) {
             items(data) {
-                ListItem(bill = it) {}
+                ListItem(bill = it) {
+                    navController
+                }
             }
         }
     }

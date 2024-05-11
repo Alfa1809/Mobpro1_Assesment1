@@ -30,6 +30,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -55,7 +56,7 @@ import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DetailScreen(navController: NavHostController) {
+fun DetailScreen(navController: NavHostController, id: Long? = null) {
 
     val context = LocalContext.current
 
@@ -68,7 +69,7 @@ fun DetailScreen(navController: NavHostController) {
 
     Scaffold(
         topBar = {
-            CenterAlignedTopAppBar(
+            TopAppBar(
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
@@ -146,6 +147,14 @@ fun DetailScreen(navController: NavHostController) {
                     whoPay(context, whoPay, bill.toFloat(), expense.toFloat())
                 )
             },
+            resetState = {
+                         name = ""
+                bill = ""
+                expense = ""
+                friendExpense = ""
+                whoPay = R.string.me
+                resultPay = ""
+            },
             modifier = Modifier.padding(padding)
         )
     }
@@ -159,7 +168,7 @@ fun FormSplitBill(
     expense: String, onExpenseChange: (String) -> Unit,
     friendExpense: String, resultPay: String,
     whoPay: Int, onPayChange: (Int) -> Unit,
-    shareData: () -> Unit,
+    shareData: () -> Unit, resetState: () -> Unit,
     modifier: Modifier
 ) {
     var expanded by rememberSaveable { mutableStateOf(false) }
@@ -429,7 +438,7 @@ fun FormSplitBill(
             ) {
                 Button(
                     onClick = {
-
+                        resetState()
                     },
                     modifier = Modifier.weight(1f),
                     colors = ButtonDefaults.buttonColors(
@@ -525,14 +534,6 @@ fun formatCurrency(amount: Float): String {
     val formatter = NumberFormat.getCurrencyInstance(Locale("IND", "ID"))
     formatter.currency = Currency.getInstance("IDR")
     return formatter.format(amount)
-}
-
-fun parseCurrency(currencyString: String): Float {
-    val formatter =
-        NumberFormat.getCurrencyInstance(Locale("id", "ID")) // Use "id" instead of "IND"
-    formatter.currency = Currency.getInstance("IDR")
-    val parsedNumber = formatter.parse(currencyString)
-    return parsedNumber?.toFloat() ?: 0f
 }
 
 
