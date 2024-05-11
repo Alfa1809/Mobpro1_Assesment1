@@ -1,14 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Assesment1</string>
-    <string name="input_invalid">%1$s Tidak boleh kosong.</string>
-    <string name="result">Tagihan: Rp. %1$s\nBiaya: Rp. %2$s\nBiaya Anda: Rp. %3$s\n%4$s harus membayar %5$s Rp. %6s.</string>
-    <string name="result_same">Tagihan: Rp. %1$s\nBiaya: Rp. %2$s\nBiaya Teman Anda: Rp. %3$s\nberutang kepada Teman Anda seimbang.</string>
+    <string name="input_invalid">%1$s tidak boleh kosong.</string>
+    <string name="result">Tagihan: Rp. %1$s\nBiaya Anda: Rp. %2$s\nBiaya Teman Anda: Rp. %3$s\n%4$s harus membayar %5$s sejumlah Rp. %6$s.</string>
+    <string name="result_same">Tagihan: RP. %1$s\nBiaya: Rp. %2$s\nBiaya Teman Anda: Rp. %3$s\nharus membayar teman Anda sama.</string>
     <string name="share">Bagikan</string>
-    <string name="tentang_aplikasi">Tentang Aplikasi</string>
-    <string name="identitas_foto">Identitas Foto</string>
+    <string name="tentang_aplikasi">Tentang aplikasi</string>
+    <string name="identitas_foto">Identitas foto</string>
     <string name="kembali">Kembali</string>
-    <string name="eat_split_description">"Eat &amp; Split" memudahkan pembagian biaya saat makan bersama teman. Pengguna dapat memasukkan nilai total tagihan, biaya pribadi, dan biaya teman, dan aplikasi akan secara otomatis menghitung dan menampilkan hasilnya. Fitur yang intuitif membantu pengguna membagi biaya dengan adil. Selain itu, dapat dengan mudah melacak riwayat transaksi.</string>
+    <string name="tambah_bill">Tambah Tagihan</string>
+    <string name="simpan">Simpan</string>
+    <string name="list_kosong">Belum ada data tagihan</string>
+    <string name="eat_split_description">"Eat &amp; Split" memudahkan pembagian biaya saat makan bersama teman. Pengguna dapat input tagihan, biaya pribadi, dan biaya teman, aplikasi akan otomatis hitung dan tampilkan hasil. Fitur intuitif membantu pengguna membagi biaya secara adil. Selain itu, dapat melacak riwayat transaksi dengan mudah.</string>
     <string name="Nim">Nim: 6706220050</string>
     <string name="ahmad_faza_alfarisi">Nama: Ahmad Faza Alfarisi</string>
+    <string name="split_a_bill_with_your_friend">Bagikan Tagihan dengan Teman Anda</string>
+    <string name="friend_name">Nama Teman</string>
+    <string name="bill_value">Nilai Tagihan</string>
+    <string name="your_friend_expense">Biaya Teman Anda</string>
+    <string name="me">Saya</string>
+    <string name="friend">Teman</string>
+    <string name="error_cant_empty">Nama, Tagihan, dan Biaya tidak boleh kosong</string>
+    <string name="error_expense">Biaya tidak boleh lebih dari nilai tagihan</string>
+    <string name="error_bill">Tagihan tidak boleh lebih dari nilai tagihan</string>
+    <string name="pesan_hapus">Hapus Tagihan ini?</string>
+    <string name="tombol_hapus">Hapus</string>
+    <string name="tombol_batal">Batal</string>
+    <string name="lainnya">Opsi lainnya</string>
+    <string name="hapus">Hapus Tagihan</string>
+    <string name="light">Terang</string>
+    <string name="dark">Gelap</string>
 </resources>

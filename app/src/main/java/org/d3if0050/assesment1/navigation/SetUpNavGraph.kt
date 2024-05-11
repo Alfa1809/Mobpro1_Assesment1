@@ -11,15 +11,20 @@ import org.d3if0050.assesment1.screen.AboutScreen
 import org.d3if0050.assesment1.screen.DetailScreen
 import org.d3if0050.assesment1.screen.KEY_ID_BILL
 import org.d3if0050.assesment1.screen.MainScreen
+import org.d3if0050.assesment1.util.SettingsDataStore
 
 @Composable
-fun SetUpNavGraph(navController: NavHostController = rememberNavController()) {
+fun SetUpNavGraph(
+    navController: NavHostController = rememberNavController(),
+    isDark: Boolean,
+    dataStore: SettingsDataStore
+) {
     NavHost(
         navController = navController,
-        startDestination =  Screen.Home.route
+        startDestination = Screen.Home.route
     ) {
         composable(route = Screen.Home.route) {
-            MainScreen(navController)
+            MainScreen(navController, isDark, dataStore)
         }
         composable(route = Screen.About.route) {
             AboutScreen(navController)
@@ -32,7 +37,7 @@ fun SetUpNavGraph(navController: NavHostController = rememberNavController()) {
             arguments = listOf(
                 navArgument(KEY_ID_BILL) { type = NavType.LongType }
             )
-        ) {navBackStackEntry ->
+        ) { navBackStackEntry ->
             val id = navBackStackEntry.arguments?.getLong(KEY_ID_BILL)
             DetailScreen(navController, id)
         }
