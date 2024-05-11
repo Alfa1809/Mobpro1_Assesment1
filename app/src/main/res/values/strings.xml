@@ -17,4 +17,6 @@
     <string name="friend_name">Friend Name</string>
     <string name="bill_value">Bill Value</string>
     <string name="your_friend_expense">Your Friend Expense</string>
+    <string name="me">Me</string>
+    <string name="friend">Friend</string>
 </resources>

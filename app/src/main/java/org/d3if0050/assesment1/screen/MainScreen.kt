@@ -80,7 +80,7 @@ fun MainScreen(navController: NavHostController) {
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-
+                    navController.navigate(Screen.FormBaru.route)
                 }
             ) {
                 Icon(
@@ -167,7 +167,7 @@ fun ListItem(bill: Bill, modifier: Modifier = Modifier, onClick: () -> Unit) {
                         maxLines = 1
                     )
                     Text(
-                        text = "pay by: ${Pay.valueOf(bill.whoPay)}",
+                        text = "pay by: ${stringResource(id = bill.whoPay)}",
                         style = MaterialTheme.typography.bodyLarge,
                         overflow = TextOverflow.Ellipsis,
                         maxLines = 1
@@ -175,7 +175,7 @@ fun ListItem(bill: Bill, modifier: Modifier = Modifier, onClick: () -> Unit) {
                 }
                 Spacer(modifier = Modifier.size(8.dp))
                 Text(
-                    text = "${formatDate(bill.date)}",
+                    text = formatDate(bill.date),
                     style = MaterialTheme.typography.bodyLarge,
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1,

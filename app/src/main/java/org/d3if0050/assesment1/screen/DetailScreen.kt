@@ -2,7 +2,6 @@ package org.d3if0050.assesment1.screen
 
 import android.content.Context
 import android.content.Intent
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -34,13 +33,13 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -64,7 +63,7 @@ fun DetailScreen(navController: NavHostController) {
     var bill by rememberSaveable { mutableStateOf("") }
     var expense by rememberSaveable { mutableStateOf("") }
     var friendExpense by rememberSaveable { mutableStateOf("") }
-    var whoPay by rememberSaveable { mutableStateOf(Pay.ME.toString()) }
+    var whoPay by rememberSaveable { mutableIntStateOf(R.string.me) }
     var resultPay by rememberSaveable { mutableStateOf("") }
 
     Scaffold(
@@ -113,7 +112,7 @@ fun DetailScreen(navController: NavHostController) {
                     friendExpense == "" || friendExpense == "0"
                 ) return@FormSplitBill
 
-                resultPay = whoPay(context, Pay.valueOf(whoPay), bill.toFloat(), expense.toFloat())
+                resultPay = whoPay(context, whoPay , bill.toFloat(), expense.toFloat())
 
             },
             expense = expense,
@@ -126,7 +125,7 @@ fun DetailScreen(navController: NavHostController) {
                     friendExpense == "" || friendExpense == "0"
                 ) return@FormSplitBill
 
-                resultPay = whoPay(context, Pay.valueOf(whoPay), bill.toFloat(), expense.toFloat())
+                resultPay = whoPay(context, whoPay, bill.toFloat(), expense.toFloat())
             },
             friendExpense = friendExpense,
             whoPay = whoPay,
@@ -139,17 +138,17 @@ fun DetailScreen(navController: NavHostController) {
                     friendExpense == "" || friendExpense == "0"
                 ) return@FormSplitBill
 
-                resultPay = whoPay(context, Pay.valueOf(whoPay), bill.toFloat(), expense.toFloat())
+                resultPay = whoPay(context, whoPay, bill.toFloat(), expense.toFloat())
             },
-            context = context,
+            shareData = {
+                shareData(
+                    context,
+                    whoPay(context, whoPay, bill.toFloat(), expense.toFloat())
+                )
+            },
             modifier = Modifier.padding(padding)
         )
     }
-}
-
-enum class Pay {
-    ME,
-    FRIEND
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -159,11 +158,16 @@ fun FormSplitBill(
     bill: String, onBillChange: (String) -> Unit,
     expense: String, onExpenseChange: (String) -> Unit,
     friendExpense: String, resultPay: String,
-    whoPay: String, onPayChange: (String) -> Unit,
-    context: Context,
+    whoPay: Int, onPayChange: (Int) -> Unit,
+    shareData: () -> Unit,
     modifier: Modifier
 ) {
     var expanded by rememberSaveable { mutableStateOf(false) }
+
+    val payByDropdown = listOf(
+        R.string.me,
+        R.string.friend
+    )
 
     Column(
         modifier = modifier
@@ -390,7 +394,7 @@ fun FormSplitBill(
                     OutlinedTextField(
                         modifier = Modifier.menuAnchor(),
                         readOnly = true,
-                        value = whoPay,
+                        value = stringResource(id = whoPay),
                         onValueChange = {},
                         trailingIcon = { TrailingIcon(expanded = expanded) },
                         colors = OutlinedTextFieldDefaults.colors(
@@ -408,11 +412,11 @@ fun FormSplitBill(
                         expanded = expanded,
                         onDismissRequest = { expanded = false },
                     ) {
-                        Pay.entries.forEach { pay ->
+                        payByDropdown.forEach { pay ->
                             DropdownMenuItem(
                                 text = { Text(pay.toString()) },
                                 onClick = {
-                                    onPayChange(pay.toString())
+                                    onPayChange(pay)
                                     expanded = false
                                 },
                             )
@@ -452,10 +456,7 @@ fun FormSplitBill(
                 Text(text = resultPay, color = MaterialTheme.colorScheme.onPrimary)
                 Spacer(modifier = Modifier.size(10.dp))
                 IconButton(onClick = {
-                    shareData(
-                        context,
-                        whoPay(context, Pay.valueOf(whoPay), bill.toFloat(), expense.toFloat())
-                    )
+                    shareData()
                 }, modifier = Modifier.fillMaxWidth()) {
                     Icon(
                         imageVector = Icons.Default.Share,
@@ -468,7 +469,7 @@ fun FormSplitBill(
     }
 }
 
-fun whoPay(context: Context, pay: Pay, bill: Float, expense: Float): String {
+fun whoPay(context: Context, pay: Int, bill: Float, expense: Float): String {
     val formatter = NumberFormat.getInstance(Locale("in", "ID"))
     formatter.currency = Currency.getInstance("IDR")
 
@@ -481,7 +482,7 @@ fun whoPay(context: Context, pay: Pay, bill: Float, expense: Float): String {
         )
     } else {
         when (pay) {
-            Pay.FRIEND -> {
+            R.string.friend -> {
                 context.getString(
                     R.string.result,
                     (bill).toString(),
@@ -493,7 +494,7 @@ fun whoPay(context: Context, pay: Pay, bill: Float, expense: Float): String {
                 )
             }
 
-            Pay.ME -> {
+            R.string.me -> {
                 context.getString(
                     R.string.result,
                     (bill).toString(),
@@ -504,6 +505,8 @@ fun whoPay(context: Context, pay: Pay, bill: Float, expense: Float): String {
                     (bill - expense).toString()
                 )
             }
+
+            else -> ""
         }
     }
 }
