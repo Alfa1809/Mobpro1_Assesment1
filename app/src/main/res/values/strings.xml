@@ -21,4 +21,10 @@
     <string name="friend">Friend</string>
     <string name="error_cant_empty">Name, Bill, and Expense can\'t be empty</string>
     <string name="error_expense">Expense cant more than bill value</string>
+    <string name="error_bill">Bill cant more than expense value</string>
+    <string name="pesan_hapus">Hapus Bill ini?</string>
+    <string name="tombol_hapus">Hapus</string>
+    <string name="tombol_batal">Batal</string>
+    <string name="lainnya">Opsi lainnya</string>
+    <string name="hapus">Hapus Bill</string>
 </resources>
